@@ -1,6 +1,3 @@
-# Documentation: https://docs.brew.sh/Formula-Cookbook
-#                https://rubydoc.brew.sh/Formula
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
 class Pyca < Formula
   include Language::Python::Virtualenv
 
@@ -100,13 +97,27 @@ class Pyca < Formula
   end
 
   def install
+    # install python packages to virtual environment in ./libexec
     venv = virtualenv_create(libexec)
-    venv.pip_install resources
-    venv.pip_install buildpath
-    bin.install_symlink libexec/"bin/pyca"
+    venv.pip_install(resources)
+    venv.pip_install(buildpath) # install pyca as package
+    
+    # create script for running pyca in .
+    File.write(prefix/"pyca","cd #{prefix}\nexec libexec/bin/python3 -m pyca ${1+\"$@\"}")
+    chmod("a+x", prefix/"pyca")
+    
+    # link script to ./bin
+    # files in ./bin get linked to brew_prefix/bin
+    bin.install_symlink(prefix/"pyca")
+    
+    # copy doc-/metafiles
     prefix.install_metafiles
     prefix.install "docs"
-    etc.install "etc/pyca.conf"
+    
+    # move ./etc/pyca.conf to brew_prefix/etc and symlink
+    etc.install("etc/pyca.conf")
+    prefix.install("etc")
+    (prefix/"etc").install_symlink(etc/"pyca.conf")
   end
 
   test do
