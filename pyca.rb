@@ -100,9 +100,13 @@ class Pyca < Formula
   end
 
   def install
-    venv = virtualenv_install_with_resources
-    
-    system "echo", "exec python3 -m pyca \${1+\"\$@\"}", ">", "pyca.sh"
+    venv = virtualenv_create(libexec)
+    venv.pip_install resources
+    venv.pip_install buildpath
+    bin.install_symlink libexec/"bin/pyca"
+    prefix.install_metafiles
+    prefix.install "docs"
+    etc.install "etc/pyca.conf"
   end
 
   test do
