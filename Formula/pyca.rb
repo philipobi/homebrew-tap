@@ -123,8 +123,6 @@ class Pyca < Formula
   end
 
   test do
-    cd prefix do
-      system("pyca --help")
-    end
+    system("pyca","--help")
   end
 end
