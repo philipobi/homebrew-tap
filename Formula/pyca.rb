@@ -123,6 +123,6 @@ class Pyca < Formula
   end
 
   test do
-    system("pyca","--help")
+    system("pyca")
   end
 end
