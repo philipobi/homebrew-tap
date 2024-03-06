@@ -98,8 +98,14 @@ class Pyca < Formula
     venv.pip_install(buildpath) # install pyca as package
     system(libexec/"bin/python3","-m","pip","install","--compile","pycurl") # install pycurl with compile option for header files 
     
-    # create script for running pyca in .
-    File.write(prefix/"pyca","cd #{prefix}\nexec #{libexec}/bin/python3 -m pyca ${1+\"$@\"}")
+    # create script to start pyca
+    File.write(
+      prefix/"pyca",
+      [
+        "cd #{prefix}",
+        "exec #{libexec}/bin/python3 -m pyca ${1+\"$@\"}"
+      ].join("\n")
+    )
     chmod("a+x", prefix/"pyca")
     
     # link script to ./bin
@@ -117,6 +123,8 @@ class Pyca < Formula
   end
 
   test do
-    system(bin/"pyca", "--help")
+    cd prefix do
+      system("pyca --help")
+    end
   end
 end
