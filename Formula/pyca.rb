@@ -99,7 +99,8 @@ class Pyca < Formula
     system(libexec/"bin/python3","-m","pip","install","--compile","pycurl") # install pycurl with compile option for header files 
     
     # create script for running pyca in .
-    File.write(prefix/"pyca","cd #{prefix}\nexec libexec/bin/python3 -m pyca ${1+\"$@\"}")
+    File.write(prefix/"main.py","import os\nprint(os.getcwd())")
+    File.write(prefix/"pyca","cd #{prefix}\nexec libexec/bin/python3 #{prefix}/main.py\nexec #{libexec}/bin/python3 -m pyca ${1+\"$@\"}")
     chmod("a+x", prefix/"pyca")
     
     # link script to ./bin
@@ -117,6 +118,6 @@ class Pyca < Formula
   end
 
   test do
-    system(prefix/"pyca", "-h")
+    system(bin/"pyca", "-h")
   end
 end
