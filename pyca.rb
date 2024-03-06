@@ -61,11 +61,6 @@ class Pyca < Formula
     sha256 "6be126e3225486dff286a8fb9a06246a5253f4c7c53b475ea5f5ac934e64194c"
   end
 
-  resource "pycurl" do
-    url "https://files.pythonhosted.org/packages/c9/5a/e68b8abbc1102113b7839e708ba04ef4c4b8b8a6da392832bb166d09ea72/pycurl-7.45.3.tar.gz"
-    sha256 "8c2471af9079ad798e1645ec0b0d3d4223db687379d17dd36a70637449f81d6b"
-  end
-
   resource "python-dateutil" do
     url "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz"
     sha256 "37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3"
@@ -101,6 +96,7 @@ class Pyca < Formula
     venv = virtualenv_create(libexec)
     venv.pip_install(resources)
     venv.pip_install(buildpath) # install pyca as package
+    system(libexec/"bin/python3","-m","pip","install","--compile","pycurl") # install pycurl with compile option for header files 
     
     # create script for running pyca in .
     File.write(prefix/"pyca","cd #{prefix}\nexec libexec/bin/python3 -m pyca ${1+\"$@\"}")
