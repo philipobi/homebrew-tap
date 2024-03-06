@@ -123,6 +123,8 @@ class Pyca < Formula
   end
 
   test do
-    system("pyca")
+    require "open3"
+    Open3.popen3("pyca","--help") do |stdin,stdout,_|
+      stdout.read
   end
 end
