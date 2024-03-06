@@ -103,8 +103,8 @@ class Pyca < Formula
       prefix/"pyca",
       [
         "cd #{prefix}",
-        "exec #{libexec}/bin/python3 -m pyca ${1+\"$@\"}"
-      ].join("\n")
+        "exec libexec/bin/python3 -m pyca ${1+\"$@\"}"
+      ].join(" && ")
     )
     chmod("a+x", prefix/"pyca")
     
