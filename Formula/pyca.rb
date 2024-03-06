@@ -117,6 +117,6 @@ class Pyca < Formula
   end
 
   test do
-    system(bin/"pyca", "-h")
+    system(prefix/"pyca", "-h")
   end
 end
